@@ -10,9 +10,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.By;
-import org.testng.Assert;
-
 public class LoginSteps {
     private LoginBusiness loginBusiness;
 
@@ -61,25 +58,18 @@ public class LoginSteps {
         getLoginBusiness().ingresarContrasena(password);
     }
 
-    @And("el usuario hace clic en el boton ingresar")
-    public void elUsuarioHaceClicEnElBotonIngresar() {
+    @And("el usuario hace click en ingresar")
+    public void elUsuarioHaceClickEnIngresar() {
+        getLoginBusiness().clickIngresarUsuario();
+    }
+
+    @And("el usuario hace clic en el boton iniciar session")
+    public void elUsuarioHaceClicEnElBotonIniciarSession() {
         getLoginBusiness().clickBotonIngresar();
     }
 
-    @Then("el usuario debe ver el dashboard principal")
-    public void elUsuarioDebeVerElDashboard() {
-        getLoginBusiness().validarLoginExitoso();
-    }
-
-    @Then("el sistema debe mostrar el mensaje de error {string}")
-    public void elSistemaDebeMostrarMensajeDeError(String expectedError) {
-        getLoginBusiness().validarMensajeError(expectedError);
-    }
-
-    @And("el mensaje de bienvenida debe contener {string}")
-    public void elMensajeDeBienvenidaDebeContener(String expectedText) {
-        String headerText = getLoginBusiness().getLoginPage().getText(By.className("app_logo"));
-        Assert.assertTrue(headerText.contains(expectedText),
-            "Expected dashboard header to contain: " + expectedText);
+    @Then("el usuario debe ver el dashboard principal con el mensaje {string} y {string}")
+    public void elUsuarioDebeVerElDashboardPrincipalConElMensajeY(String mensaje, String usuario) {
+        getLoginBusiness().validarDashboardConMensajeYUsuario(mensaje, usuario);
     }
 }

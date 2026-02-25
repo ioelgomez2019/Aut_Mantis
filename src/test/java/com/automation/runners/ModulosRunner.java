@@ -5,25 +5,24 @@ import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
 
 /**
- * ProductRunner - Executes product/shopping cart scenarios.
- * Usage: mvn test -Dtest=ProductRunner
- *        ejecutar-pruebas.bat product
+ * ModulosRunner - Executes only @modulos scenarios.
+ * Usage: mvn test -Dtest=ModulosRunner
  */
 @CucumberOptions(
-    features = {"Scenarios/agregarCarrito", "Scenarios/pasarelaPagos"},
+    features = "Scenarios/modulos",
     glue = {"com.automation.features"},
     plugin = {
         "pretty",
-        "html:target/reports/product-report.html",
-        "json:target/reports/product-report.json",
-        "junit:target/reports/product-junit.xml"
+        "html:target/reports/modulos-report.html",
+        "json:target/reports/modulos-report.json",
+        "junit:target/reports/modulos-junit.xml"
     },
-    tags = "@AgregarCarrito or @PasarelaPagos",
+    tags = "@modulos",
     monochrome = true,
     dryRun = false,
     publish = false
 )
-public class ProductRunner extends AbstractTestNGCucumberTests {
+public class ModulosRunner extends AbstractTestNGCucumberTests {
 
     @Override
     @DataProvider(parallel = false)

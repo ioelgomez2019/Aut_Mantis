@@ -43,7 +43,11 @@ public class ConfigManager {
     }
 
     public String getBaseUrl() {
-        return getProperty("base.url", "https://www.saucedemo.com");
+        String overrideUrl = System.getProperty("base.url");
+        if (overrideUrl != null && !overrideUrl.trim().isEmpty()) {
+            return overrideUrl.trim();
+        }
+        return getProperty("base.url", "http://10.20.22.50/SistemaMantis/login_page.php");
     }
 
     public String getBrowser() {

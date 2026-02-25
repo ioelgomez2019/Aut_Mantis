@@ -1,125 +1,52 @@
-# AutomationCorebank
+# AutomationCorebank - InicioSession Only
 
-Framework BDD con Selenium + Cucumber + TestNG + Maven.
+Proyecto automatizado con Selenium + Cucumber + TestNG.
 
-## Arquitectura actual
-
-```text
-AutomationCorebank/
-|-- pom.xml
-|-- Scenarios/
-|   |-- inicioSession/
-|   |   `-- inicioSession.feature
-|   `-- agregarCarrito/
-|       `-- agregarCarrito.feature
-|-- src/test/java/
-|   |-- com/automation/
-|   |   |-- core/
-|   |   |   |-- DriverManager.java
-|   |   |   |-- BasePage.java
-|   |   |   `-- ScreenshotUtil.java
-|   |   |-- config/
-|   |   |   `-- ConfigManager.java
-|   |   |-- pages/
-|   |   |   |-- LoginPage.java
-|   |   |   `-- ProductsPage.java
-|   |   |-- negocio/
-|   |   |   |-- LoginBusiness.java
-|   |   |   `-- ProductBusiness.java
-|   |   |-- stepdefinitions/
-|   |   |   |-- LoginSteps.java
-|   |   |   `-- ProductSteps.java
-|   |   `-- hooks/
-|   |       `-- Hooks.java
-|   `-- runners/
-|       |-- LoginRunner.java
-|       |-- ProductRunner.java
-|       |-- E2ERunner.java
-|       `-- TestRunner.java
-`-- src/test/resources/
-    |-- config/environment.config
-    |-- cucumber.properties
-    `-- extent.properties
-```
-
-## Flujo de capas
+## Arquitectura activa
 
 ```text
-Feature (.feature)
-  -> StepDefinitions
-  -> Negocio
-  -> Pages
-  -> Core (Driver/Base/Screenshot)
+Scenarios/
+└── inicioSession/
+    └── inicioSession.feature
+
+src/test/java/com/automation/
+├── core/
+│   ├── DriverManager.java
+│   ├── BasePage.java
+│   └── ScreenshotUtil.java
+├── config/
+│   └── ConfigManager.java
+├── features/
+│   └── login/
+│       ├── LoginPage.java
+│       ├── LoginBusiness.java
+│       └── LoginSteps.java
+└── runners/
+    └── LoginRunner.java
 ```
 
-## Regla importante para Examples
-
-Cuando uses placeholders como `<user>`, `<password>`, `<producto>`:
-
-1. Deben ir en `Scenario Outline`.
-2. Los valores se definen en `Examples`.
-3. No usar placeholders en `Background` si esperas sustitucion por fila.
-
-## Ejecucion de pruebas
-
-### Ejecutar todo
+## Ejecucion
 
 ```bash
 mvn clean test
 ```
 
-### Ejecutar por runner
+o solo runner de login:
 
 ```bash
-mvn test -Dtest=LoginRunner
-mvn test -Dtest=ProductRunner
-mvn test -Dtest=E2ERunner
-mvn test -Dtest=TestRunner
+mvn clean test -Dtest=LoginRunner
 ```
 
-### Ejecutar por tags (PowerShell)
+## URL base
+
+Se toma desde `src/test/resources/config/environment.config`:
+
+```properties
+base.url=http://10.20.22.50/SistemaMantis/login_page.php
+```
+
+Tambien puedes sobrescribirla al ejecutar:
 
 ```bash
-mvn test "-Dcucumber.filter.tags=@login"
-mvn test "-Dcucumber.filter.tags=@AgregarCarrito"
-mvn test "-Dcucumber.filter.tags=@login or @AgregarCarrito"
+mvn clean test -Dbase.url=http://10.20.22.50/SistemaMantis/login_page.php
 ```
-
-### Validar mapeo de pasos sin abrir navegador (dry-run)
-
-```bash
-mvn -Dtest=LoginRunner "-Dcucumber.execution.dry-run=true" test
-mvn -Dtest=ProductRunner "-Dcucumber.execution.dry-run=true" test
-```
-
-### Solo compilar pruebas
-
-```bash
-mvn clean -DskipTests test-compile
-```
-
-## Reportes
-
-Los runners generan reportes en `target/reports/`:
-
-- `login-report.html`, `login-report.json`, `login-junit.xml`
-- `product-report.html`, `product-report.json`, `product-junit.xml`
-- `e2e-report.html`, `e2e-report.json`, `e2e-junit.xml`
-- `full-report.html`, `full-report.json`, `full-junit.xml`
-
-## Configuracion
-
-Archivo: `src/test/resources/config/environment.config`
-
-Claves principales:
-
-- `base.url`
-- `browser`
-- `implicit.wait`
-- `explicit.wait`
-
-## Requisitos
-
-- Java 11+
-- Maven 3.8+
-- Chrome instalado# Aut_Mantis

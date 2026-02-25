@@ -4,42 +4,64 @@ import com.automation.core.BasePage;
 import org.openqa.selenium.By;
 
 /**
- * LoginPage - Page Object for Saucedemo login page.
+ * LoginPage - Page Object for MantisBT login.
  * Contains only element locators - NO LOGIC.
  */
 public class LoginPage extends BasePage {
 
-    private static final By USERNAME = By.id("user-name");
+    private static final By MANTIS_USERNAME = By.id("username");
     private static final By PASSWORD = By.id("password");
-    private static final By LOGIN_BUTTON = By.id("login-button");
-    private static final By ERROR_MESSAGE = By.cssSelector("h3[data-test='error']");
-    private static final By PRODUCTS_CONTAINER = By.className("inventory_container");
+    private static final By MANTIS_SIGN_IN_BUTTON = By.xpath(
+        "//input[@type='submit' and contains(@value,'Iniciar')] | //button[contains(normalize-space(.),'Iniciar')]"
+    );
+    private static final By MANTIS_USER_INFO = By.className("user-info");
+    private static final By MANTIS_SMALLER_TEXT = By.className("smaller-75");
 
     public void enterUsername(String username) {
-        type(USERNAME, username);
+        type(MANTIS_USERNAME, username);
     }
 
     public void enterPassword(String password) {
         type(PASSWORD, password);
     }
 
+    public void clickContinueAfterUsername() {
+        if (isPresent(MANTIS_SIGN_IN_BUTTON)) {
+            click(MANTIS_SIGN_IN_BUTTON);
+        }
+    }
+
     public void clickLoginButton() {
-        click(LOGIN_BUTTON);
+        click(MANTIS_SIGN_IN_BUTTON);
     }
 
-    public String getErrorMessage() {
-        return getText(ERROR_MESSAGE);
+    public boolean isMantisDashboardDisplayed() {
+        return isElementDisplayed(MANTIS_USER_INFO);
     }
 
-    public boolean isLoginPageDisplayed() {
-        return isElementDisplayed(LOGIN_BUTTON);
+    public boolean isMessageClassDisplayed(String className) {
+        try {
+            return isPresent(By.className(className));
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    public boolean isProductsPageDisplayed() {
-        return isElementDisplayed(PRODUCTS_CONTAINER);
+    public String getDashboardSmallMessageText() {
+        if (isElementDisplayed(MANTIS_SMALLER_TEXT)) {
+            return getText(MANTIS_SMALLER_TEXT).trim();
+        }
+        return "";
     }
 
-    public boolean isErrorDisplayed() {
-        return isElementDisplayed(ERROR_MESSAGE);
+    public String getDashboardUserText() {
+        if (isElementDisplayed(MANTIS_USER_INFO)) {
+            return getText(MANTIS_USER_INFO).trim();
+        }
+        return "";
+    }
+
+    private boolean isPresent(By locator) {
+        return !driver.findElements(locator).isEmpty();
     }
 }
